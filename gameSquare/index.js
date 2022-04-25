@@ -3,20 +3,39 @@ $start.addEventListener('click', startGame)
 const $game = document.querySelector('#game')
 let $time = document.querySelector('#time')
 let score = 0
+let isGameStarted = false
 
 function startGame() {
+    console.log('startGame')
+
+    isGameStarted = true
 
     console.log('Start')
     $start.classList.add('hide')
     $game.style.backgroundColor = '#fff'
 
-    setInterval(function() {
-        let time = parxeFloat($time.textContent)
-        console.log('1')}, 1000)
+    const interval = setInterval(function() {
+        let time = parseFloat($time.textContent)
+        
+        if (time === 0) {
+            console.log('fin')
+            clearInterval(interval);
+            isGameStarted = false
+            $start.classList.remove('hide')
+            $game.style.backgroundColor = '#ccc'
+            $game.innerHTML = ""
+            
+
+        } else {
+            $time.textContent = (time - 0.1).toFixed(1)
+        }
+    }, 100)
 
     renderBox()
 
 }
+
+
 
 function renderBox() {
     $game.innerHTML = ""
@@ -28,9 +47,16 @@ function renderBox() {
    box.style.left = `${getRandom(40, 200)}px`
    box.style.cursor = 'pointer'
    console.log('finish')
-   score++
+   
 
-   box.addEventListener('click', renderBox)
+   box.addEventListener('click', () => {
+    console.log(isGameStarted)
+        if(!isGameStarted) {return}
+       
+       score++
+       renderBox()
+
+   })
 
    
 //    $game.insertAdjacentElement('afterbegin', box)
